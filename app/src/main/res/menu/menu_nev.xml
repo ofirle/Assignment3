@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_signOut"
+        android:title="Sign Out"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        />
+    <item
+        android:id="@+id/nav_orders"
+        android:title="Purchases"
+        android:icon="@drawable/download_icon"
+        />
+    <item
+        android:id="@+id/nav_all"
+        android:title="All"
+        android:icon="@drawable/all_icon"/>
+    <item
+        android:id="@+id/nav_search"
+        android:title="Search"
+        android:icon="@drawable/search_icon"/>
+
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/home_icon"/>
+
+</menu>

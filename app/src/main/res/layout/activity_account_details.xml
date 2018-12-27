@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AccountDetails">
+
+    <ImageView
+        android:id="@+id/imageLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/logo2" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtEmailTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:text="Email: "
+                android:textColor="#717171"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtNameTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif"
+                android:text="Full Name: "
+                android:textColor="#717171"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:text=""
+                android:textColor="#717171"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif"
+                android:text=""
+                android:textColor="#717171"
+                android:textSize="18dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageProfilePicture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/txtTitle"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+
+    <Button
+        android:id="@+id/buttonSignOut"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_round"
+        android:onClick="onClickSignOut"
+        android:text="Sign out"
+        android:textColor="#ea4335" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="GoToLibrary"
+        android:text="Button" />
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "90736229020",
+    "firebase_url": "https://ofirappelad-d6b53.firebaseio.com",
+    "project_id": "ofirappelad-d6b53",
+    "storage_bucket": "ofirappelad-d6b53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90736229020:android:6c60952bfcdb8686",
+        "android_client_info": {
+          "package_name": "com.example.ol.assignment2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90736229020-pk6oljbave8og4da4u90osursopajjck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwblq7G2xGYV-CTeMW3O9r_E2mzMtDA_4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

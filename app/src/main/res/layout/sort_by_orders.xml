@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/ivCloseReview"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        android:elevation="5dp"
+        app:srcCompat="@drawable/exit" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="#e5e5e5"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Sort by..."
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/titleBookName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="15dp"
+                android:text="Book Name (A-Z)"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/titleAuthorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleBookName"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/titleBookName"
+                android:text="Author Name (A-Z)"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/titleDateBought"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleAuthorName"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/titleBookName"
+                android:text="Date"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/titlePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleDateBought"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/titleBookName"
+                android:text="Price (High-Low)"
+                android:textSize="20sp"
+                android:layout_marginBottom="20dp"/>
+
+
+            <RadioGroup
+                android:id="@+id/rgRadiosButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/titleBookName"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rbBookName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:layout_marginEnd="15dp" />
+
+                <RadioButton
+                    android:id="@+id/rbAuthorNAme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:layout_marginTop="10dp" />
+                <RadioButton
+                    android:id="@+id/rbDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:layout_marginTop="10dp" />
+
+                <RadioButton
+                    android:id="@+id/rbPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:layout_marginTop="10dp" />
+                </RadioGroup>
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

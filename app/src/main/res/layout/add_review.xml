@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/ivCloseReview"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        android:elevation="5dp"
+        app:srcCompat="@drawable/exit" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp"
+        app:cardBackgroundColor="#e5e5e5"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Add Review"
+        android:textSize="24sp"
+         />
+
+
+    <TextView
+        android:id="@+id/tvBookNameReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:text="Elon Musk"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:autoSizeTextType="uniform"/>
+
+    <RatingBar
+        android:id="@+id/ratingBarReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBookNameReview"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:stepSize="0.5" />
+
+    <EditText
+        android:id="@+id/etTextReview"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/ratingBarReview"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="top"
+        android:background="@drawable/round_edittext"
+        android:paddingTop="3dp"
+        android:paddingLeft="3dp"
+        android:inputType="textMultiLine"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:hint="Max 200 words..."/>
+
+    <Button
+                android:id="@+id/btnSubmitReview"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/etTextReview"
+                android:textColor="#000000"
+                android:background="@drawable/round_button2"
+                android:text="Submit" />
+
+
+
+</RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
