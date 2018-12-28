@@ -45,7 +45,8 @@
         android:layout_alignStart="@+id/txtTitle"
         android:text="Author Name"
         android:textColor="#e6e6e6"
-        android:textSize="22sp"
+        android:textSize="18sp"
+        android:autoSizeMaxTextSize="18sp"
         android:autoSizeTextType="uniform"/>
 
     <TextView
