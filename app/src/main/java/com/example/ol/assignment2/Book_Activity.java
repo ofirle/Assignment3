@@ -175,6 +175,9 @@ public class Book_Activity extends AppCompatActivity {
                     user.setTotalPurchase(user.getTotalPurchase() + 1);
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
                     userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                    Toast toast=Toast.makeText(Book_Activity.this, "Successfully Purchased", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
                     btnReview.setVisibility(View.VISIBLE);
                     buttonsSetChecker(true, theBook.getPrice());
                 }

@@ -100,7 +100,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignBottom="@id/ivArrowDown"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="10dp"
 
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_arrow_drop_up_black_24dp" />

@@ -55,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Uri myUri = Uri.parse(mData.get(i).getImg());
         Picasso.with(mContext).load(myUri).into(myViewHolder.iv_BookCover);
         myViewHolder.iv_BookCover.setScaleType(ImageView.ScaleType.FIT_XY);
-        myViewHolder.tvPrice.setText(Double.toString(mData.get(i).getPrice())+"$");
+        myViewHolder.tvPrice.setText(Double.toString(mData.get(i).getPrice()));
         myViewHolder.tvRating.setText(Double.toString(mData.get(i).getRating()));
 
         myViewHolder.tvPrice.setTypeface(myFont);

@@ -245,8 +245,10 @@ txtPrice=(TextView) dialog.findViewById(R.id.txtPrice);
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numOfMinDownloads = numOfMinDownloads + 1000;
-                txtMinReviews.setText(Integer.toString(numOfMinDownloads));
+                if (numOfMinDownloads < 50000) {
+                    numOfMinDownloads = numOfMinDownloads + 1000;
+                    txtMinReviews.setText(Integer.toString(numOfMinDownloads));
+                }
             }
         });
         downArrow.setOnClickListener(new View.OnClickListener() {
@@ -260,6 +262,9 @@ txtPrice=(TextView) dialog.findViewById(R.id.txtPrice);
         });
 
         sbPrice.setProgress(100);
+        maxPriceFilter=10.0;
+        txtMaxPriceSelectedFilter.setText(Double.toString(maxPriceFilter)+'$');
+
         sbPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -296,6 +301,8 @@ txtPrice=(TextView) dialog.findViewById(R.id.txtPrice);
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                maxPriceFilter=10.0;
+                numOfMinDownloads=0;
                 dialog.dismiss();
             }
         });
