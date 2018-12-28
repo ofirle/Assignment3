@@ -48,6 +48,7 @@ public class BookLibrary extends AppCompatActivity {
     TextView txtNewOnTheShelf,txtPopularity,txtBiography,txtThriller,txtFiction,txtSelfHelp;
     Typeface myFont;
 
+    int elad=100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 super.onCreate(savedInstanceState);
