@@ -23,9 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spinner_sort"
-                android:text="New On Shell"
+                android:text="New on the Shelf"
                 android:textColor="#e6e6e6"
-                android:layout_marginVertical="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:textStyle="bold"
                 android:textSize="20sp"/>

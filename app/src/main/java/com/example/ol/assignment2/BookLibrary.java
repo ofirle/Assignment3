@@ -1,6 +1,7 @@
 package com.example.ol.assignment2;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ol.assignment2.adapter.RecyclerViewAdapter;
@@ -43,13 +45,32 @@ public class BookLibrary extends AppCompatActivity {
     private ArrayList<Book> lstPopularityBooks = new ArrayList<>();
     private SortArrayListFields salf = new SortArrayListFields();
     BottomNavigationView bottomNav;
+    TextView txtNewOnTheShelf,txtPopularity,txtBiography,txtThriller,txtFiction,txtSelfHelp;
+    Typeface myFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_library);
 
         bottomNav = findViewById(R.id.bottom_navigation);
+
+        myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
+
+        txtNewOnTheShelf=(TextView)findViewById(R.id.txtnew);
+        txtPopularity=(TextView)findViewById(R.id.txtpopularity);
+        txtBiography=(TextView)findViewById(R.id.txtBiography);
+        txtThriller= (TextView)findViewById(R.id.txtThriller);
+        txtFiction=(TextView)findViewById(R.id.txtFiction);
+        txtSelfHelp=(TextView)findViewById(R.id.txtSelfhelp);
+
+        txtNewOnTheShelf.setTypeface(myFont);
+        txtPopularity.setTypeface(myFont);
+        txtBiography.setTypeface(myFont);
+        txtThriller.setTypeface(myFont);
+        txtFiction.setTypeface(myFont);
+        txtSelfHelp.setTypeface(myFont);
+
 
         fbUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -145,7 +166,7 @@ public class BookLibrary extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) findViewById(rv_index);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName);
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName,myFont);
         recyclerView.setAdapter(myAdapter);
     }
 

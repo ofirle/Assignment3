@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -33,13 +34,15 @@ public class RecyclerViewOrdersAdapter extends  RecyclerView.Adapter<RecyclerVie
     private List<Order> mData;
     private User mUser;
     private String mActivityFrom;
+    private Typeface myFont;
 
 
-    public RecyclerViewOrdersAdapter(Context mcontext, List<Order> mdata,User user, String activityfrom) {
+    public RecyclerViewOrdersAdapter(Context mcontext, List<Order> mdata,User user, String activityfrom,Typeface m_myFont) {
         this.mContext = mcontext;
         this.mData = mdata;
         this.mUser = user;
         this.mActivityFrom = activityfrom;
+        this.myFont= m_myFont;
     }
 
     @NonNull
@@ -60,6 +63,11 @@ public class RecyclerViewOrdersAdapter extends  RecyclerView.Adapter<RecyclerVie
         myViewHolder.tvAuthor.setText(mData.get(i).getBook().getAuthor());
         myViewHolder.tvPrice.setText(Double.toString(mData.get(i).getBook().getPrice()) + "$");
         myViewHolder.tvDate.setText(mData.get(i).getDate());
+
+        myViewHolder.tvTitle.setTypeface(myFont);
+        myViewHolder.tvAuthor.setTypeface(myFont);
+        myViewHolder.tvPrice.setTypeface(myFont);
+        myViewHolder.tvDate.setTypeface(myFont);
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

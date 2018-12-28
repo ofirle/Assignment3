@@ -28,7 +28,7 @@
         android:layout_below="@+id/txtTitle"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"
-        app:srcCompat="@drawable/logo2" />
+        app:srcCompat="@drawable/logo3" />
 
     <TextView
         android:id="@+id/txtNames"

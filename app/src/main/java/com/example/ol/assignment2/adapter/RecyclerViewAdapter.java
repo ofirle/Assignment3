@@ -2,6 +2,7 @@ package com.example.ol.assignment2.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -28,14 +29,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Book> mData;
     private User mUser;
     private String mActivityFrom;
+    private Typeface myFont;
 
 
-    public RecyclerViewAdapter(Context mcontext, List<Book> mdata, User user, String activityfrom) {
+    public RecyclerViewAdapter(Context mcontext, List<Book> mdata, User user, String activityfrom,Typeface m_myFont) {
         this.mContext = mcontext;
         this.mData = mdata;
         this.mUser = user;
         this.mActivityFrom = activityfrom;
-
+        this.myFont= m_myFont;
     }
 
     @NonNull
@@ -55,6 +57,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         myViewHolder.iv_BookCover.setScaleType(ImageView.ScaleType.FIT_XY);
         myViewHolder.tvPrice.setText(Double.toString(mData.get(i).getPrice())+"$");
         myViewHolder.tvRating.setText(Double.toString(mData.get(i).getRating()));
+
+        myViewHolder.tvPrice.setTypeface(myFont);
+        myViewHolder.tvRating.setTypeface(myFont);
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

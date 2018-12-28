@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -56,9 +57,11 @@ public class AllBooks_Activity extends AppCompatActivity{
     private SeekBar sbPrice;
     ImageView upArrow,downArrow;
     TextView txtMinReviews,txtMaxPriceSelectedFilter;
+    TextView txtDownloads,txtPrice;
     Button btnSubmitFilter;
     int numOfMinDownloads=0;
     double maxPriceFilter;
+    Typeface myFont;
 
 
     private SortArrayListFields salf = new SortArrayListFields();
@@ -71,6 +74,8 @@ public class AllBooks_Activity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_books);
+
+        myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
 
         BottomNavigationView bottomNav=findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -149,7 +154,7 @@ public class AllBooks_Activity extends AppCompatActivity{
         rvBookList.setLayoutManager(new GridLayoutManager(this, 3));
         Context context = rvBookList.getContext();
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_slide_from_left);
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName);
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName,myFont);
         rvBookList.setAdapter(myAdapter);
         rvBookList.setLayoutAnimation(controller);
         rvBookList.getAdapter().notifyDataSetChanged();
@@ -221,6 +226,8 @@ public class AllBooks_Activity extends AppCompatActivity{
         dialog.setContentView(R.layout.filter_books);
 
 
+txtDownloads=(TextView) dialog.findViewById(R.id.txtDownloads);
+txtPrice=(TextView) dialog.findViewById(R.id.txtPrice);
         ivClose = (ImageView) dialog.findViewById(R.id.ivCloseFilter);
         sbPrice = (SeekBar) dialog.findViewById(R.id.sbPrice);
         upArrow = (ImageView) dialog.findViewById(R.id.ivArrowUp);
@@ -229,7 +236,11 @@ public class AllBooks_Activity extends AppCompatActivity{
         txtMaxPriceSelectedFilter= (TextView) dialog.findViewById(R.id.txtMaxPriceSelectedFilter);
         btnSubmitFilter = (Button) dialog.findViewById(R.id.btnSubmitFilter);
 
-
+        txtDownloads.setTypeface(myFont);
+        txtPrice.setTypeface(myFont);
+        txtMinReviews.setTypeface(myFont);
+        txtMaxPriceSelectedFilter.setTypeface(myFont);
+        btnSubmitFilter.setTypeface(myFont);
 
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override

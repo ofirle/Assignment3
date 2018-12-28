@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -65,6 +66,7 @@ public class Book_Activity extends AppCompatActivity {
     private Book theBook;
     ArrayList<Book> lstBook; // Because we need to transfer to next activity.
     private double totalRatingReviews = 0;
+    Typeface myFont;
 
 
     @Override
@@ -73,10 +75,13 @@ public class Book_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_book);
         String activityFrom = null;
         Intent intent = getIntent();
+
         theBook = (Book) intent.getSerializableExtra("choseBook");
         user = (User) intent.getSerializableExtra("user");
         lstBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
         activityFrom = intent.getStringExtra("activityFrom");
+
+        myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
 
         BottomNavigationView bottomNav=findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -101,6 +106,18 @@ public class Book_Activity extends AppCompatActivity {
         btnDownload = findViewById(R.id.btnDownload);
         ratingBarBook = findViewById(R.id.ratingBarBook);
         tvTotalRatingTxt = findViewById(R.id.totalRatingTxt);
+
+        tvTitle.setTypeface(myFont);
+        tvAuthor.setTypeface(myFont);
+        tvGenre.setTypeface(myFont);
+        tvPages.setTypeface(myFont);
+        tvDownload.setTypeface(myFont);
+        tvYear.setTypeface(myFont);
+        btnBuy.setTypeface(myFont);
+        btnReview.setTypeface(myFont);
+        btnDownload.setTypeface(myFont);
+        tvTotalRatingTxt.setTypeface(myFont);
+
 
         final int idBook = theBook.getId();
         final String Title = theBook.getTitle();
@@ -177,7 +194,7 @@ public class Book_Activity extends AppCompatActivity {
         rvReviewList.setLayoutManager(new LinearLayoutManager(this));
         Context context = rvReviewList.getContext();
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down);
-        RecyclerViewReviewsAdapter myAdapter = new RecyclerViewReviewsAdapter(this, lstReview);
+        RecyclerViewReviewsAdapter myAdapter = new RecyclerViewReviewsAdapter(this, lstReview,myFont);
         rvReviewList.setAdapter(myAdapter);
 
         rvReviewList.setLayoutAnimation(controller);
@@ -295,6 +312,9 @@ public class Book_Activity extends AppCompatActivity {
         btnSubmitReview = (Button) dialog.findViewById(R.id.btnSubmitReview);
         ratingReviewBar = (RatingBar) dialog.findViewById(R.id.ratingBarReview);
         tvBookName.setText(Title);
+        tvBookName.setTypeface(myFont);
+        etTextReview.setTypeface(myFont);
+        btnSubmitReview.setTypeface(myFont);
 
         btnSubmitReview.setOnClickListener(new View.OnClickListener() {
             @Override

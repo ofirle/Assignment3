@@ -18,11 +18,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Typeface myFont;
         Timer timer;
         // Write a message to the database
         txtNames = findViewById(R.id.txtNames);
-        myFont = Typeface.createFromAsset(this.getAssets(), "fonts/impact.ttf");
+        Typeface myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
         txtNames.setTypeface(myFont);
         timer = new Timer();
         timer.schedule(new TimerTask() {

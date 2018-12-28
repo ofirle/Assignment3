@@ -1,6 +1,7 @@
 package com.example.ol.assignment2.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +19,12 @@ import java.util.List;
 public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerViewReviewsAdapter.MyViewHolder> {
     private Context mContext;
     private List<Review> mData;
+    private Typeface myFont;
 
-    public RecyclerViewReviewsAdapter(Context mcontext, List<Review> mdata) {
+    public RecyclerViewReviewsAdapter(Context mcontext, List<Review> mdata,Typeface m_myFont) {
         this.mContext = mcontext;
         this.mData = mdata;
+        myFont= m_myFont;
     }
 
     @NonNull
@@ -31,6 +34,8 @@ public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerVi
         LayoutInflater mInflater = LayoutInflater.from(mContext);
 
         view = mInflater.inflate(R.layout.item_review, viewGroup, false);
+
+
         return new RecyclerViewReviewsAdapter.MyViewHolder(view);
     }
 
@@ -39,6 +44,9 @@ public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerVi
         myViewHolder.txtNameReview.setText(mData.get(i).getName());
         myViewHolder.txtDateReview.setText(mData.get(i).getDate());
         myViewHolder.txtTextReview.setText(mData.get(i).getTextReview());
+        myViewHolder.txtNameReview.setTypeface(myFont);
+        myViewHolder.txtDateReview.setTypeface(myFont);
+        myViewHolder.txtTextReview.setTypeface(myFont);
         myViewHolder.ratingBarReview.setRating((float)(mData.get(i).getScoreReview()));
 
 

@@ -2,6 +2,7 @@ package com.example.ol.assignment2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -44,12 +45,14 @@ public class Search_Activity extends AppCompatActivity {
     private FirebaseUser fbUser;
     private User user;
     private DatabaseReference myUserRef;
+    Typeface myFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search2);
 
+        myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -60,7 +63,9 @@ public class Search_Activity extends AppCompatActivity {
 
         tvNoBooksFound=(TextView)findViewById(R.id.txtNoBooksFound);
         tvNoBooksFound.setVisibility(View.INVISIBLE);
+        tvNoBooksFound.setTypeface(myFont);
         etSearch = (EditText) findViewById(R.id.etSearch);
+        etSearch.setTypeface(myFont);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,6 +109,7 @@ private void filter(String text) {
         if(filteredList.size()==0) {
             tvNoBooksFound.setVisibility(View.VISIBLE);
             tvNoBooksFound.setText("There is no books for the search: "+"\""+etSearch.getText().toString()+"\"");
+
         }
         else {
             tvNoBooksFound.setVisibility(View.INVISIBLE);
@@ -148,7 +154,7 @@ private void filter(String text) {
                 }
             };
     private void initRecyclerView(ArrayList<Book> lst) {
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName);
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, user, classStringName,myFont);
         rvBookList.setAdapter(myAdapter);
         rvBookList.setLayoutManager(new GridLayoutManager(this, 3));
         context = rvBookList.getContext();

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -52,6 +53,7 @@ public class Orders_Activity extends AppCompatActivity {
     private User user;
     private FirebaseUser fbUser;
     private DatabaseReference myUserRef;
+    Typeface myFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,9 @@ public class Orders_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_orders);
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
+
+        myFont= Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
+
         if(user.getEmail().equals("guest"))
         {
             signOutFirebase();
@@ -69,7 +74,8 @@ public class Orders_Activity extends AppCompatActivity {
         else {
             lstBook = (ArrayList<Book>) intent.getSerializableExtra("booksList");
             titleText = findViewById(R.id.titleText);
-            titleText.setText("Orders Total: " + user.getTotalPurchase());
+            titleText.setText("Total Orders: " + user.getTotalPurchase());
+            titleText.setTypeface(myFont);
             BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
             bottomNav.setOnNavigationItemSelectedListener(navListener);
             Menu menu = bottomNav.getMenu();
@@ -118,7 +124,7 @@ public class Orders_Activity extends AppCompatActivity {
         rvOrdersList.setLayoutManager(new LinearLayoutManager(this));
         Context context = rvOrdersList.getContext();
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down);
-        RecyclerViewOrdersAdapter myAdapter = new RecyclerViewOrdersAdapter(this, lstOrders, user, classStringName);
+        RecyclerViewOrdersAdapter myAdapter = new RecyclerViewOrdersAdapter(this, lstOrders, user, classStringName,myFont);
         rvOrdersList.setAdapter(myAdapter);
 
         rvOrdersList.setLayoutAnimation(controller);

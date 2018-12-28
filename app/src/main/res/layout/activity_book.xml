@@ -31,15 +31,17 @@
         android:text="Book Title"
         android:textColor="#e6e6e6"
         android:textSize="30sp"
+        android:autoSizeMinTextSize="15sp"
         android:textStyle="bold"
         android:autoSizeTextType="uniform"/>
 
     <TextView
         android:id="@+id/txtAuthor"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtTitle"
         android:layout_marginTop="7dp"
+        android:layout_marginRight="10dp"
         android:layout_alignStart="@+id/txtTitle"
         android:text="Author Name"
         android:textColor="#e6e6e6"
