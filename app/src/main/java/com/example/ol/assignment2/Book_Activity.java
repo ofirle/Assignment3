@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -329,7 +330,10 @@ public class Book_Activity extends AppCompatActivity {
                         mReviewsBookDatabase.setValue(lstReview);
                         btnReview.setVisibility(View.GONE);
                         updateTheRatingOnDatabase(ratingReviewBar.getRating());
-                        Toast.makeText(Book_Activity.this, "Review wrote successfully!", Toast.LENGTH_LONG).show();
+                       Toast toast=Toast.makeText(Book_Activity.this, "Thank You for Your Review!", Toast.LENGTH_LONG);
+                       toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+                       toast.show();
+
                         dialog.dismiss();
                         initRecyclerView();
                     }
