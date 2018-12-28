@@ -53,7 +53,7 @@ import java.util.List;
 
 public class Book_Activity extends AppCompatActivity {
 
-    private TextView tvTitle, tvAuthor, tvGenre, tvPages, tvDownload,tvYear;
+    private TextView tvTitle, tvAuthor, tvGenre, tvPages, tvDownload,tvYear,tvBetheFirst;
     private ImageView ivBookCover;
     private Button btnBuy, btnReview, btnDownload;
     private ImageView ivClose;
@@ -107,6 +107,8 @@ public class Book_Activity extends AppCompatActivity {
         btnDownload = findViewById(R.id.btnDownload);
         ratingBarBook = findViewById(R.id.ratingBarBook);
         tvTotalRatingTxt = findViewById(R.id.totalRatingTxt);
+        tvBetheFirst=findViewById(R.id.BeFirstToReview);
+
 
         tvTitle.setTypeface(myFont);
         tvAuthor.setTypeface(myFont);
@@ -118,6 +120,8 @@ public class Book_Activity extends AppCompatActivity {
         btnReview.setTypeface(myFont);
         btnDownload.setTypeface(myFont);
         tvTotalRatingTxt.setTypeface(myFont);
+        tvBetheFirst.setTypeface(myFont);
+        tvBetheFirst.setVisibility(View.INVISIBLE);
 
 
         final int idBook = theBook.getId();
@@ -179,6 +183,10 @@ public class Book_Activity extends AppCompatActivity {
                     toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
                     toast.show();
                     btnReview.setVisibility(View.VISIBLE);
+                    if(lstReview.size()==0)
+                    {
+                        tvBetheFirst.setVisibility(View.VISIBLE);
+                    }
                     buttonsSetChecker(true, theBook.getPrice());
                 }
             }
@@ -336,7 +344,7 @@ public class Book_Activity extends AppCompatActivity {
                        Toast toast=Toast.makeText(Book_Activity.this, "Thank You for Your Review!", Toast.LENGTH_LONG);
                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
                        toast.show();
-
+                        tvBetheFirst.setVisibility(View.INVISIBLE);
                         dialog.dismiss();
                         initRecyclerView();
                     }

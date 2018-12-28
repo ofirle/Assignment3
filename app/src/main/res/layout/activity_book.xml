@@ -179,6 +179,16 @@
     android:layout_above="@id/bottom_navigation"
     android:layout_marginTop="15dp"
     >
+    <TextView
+        android:id="@+id/BeFirstToReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Be The First One to Review this Book!"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textColor="#e6e6e6"
+        android:textSize="16sp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvReviewList"
         android:layout_width="match_parent"
