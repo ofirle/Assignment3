@@ -283,12 +283,12 @@ public class SignInActivity extends AppCompatActivity {
             intent = new Intent(SignInActivity.this, BookLibraryActivity.class);
             startActivity(intent);
         } else {
-            if (getIntent().getStringExtra("ActivityFrom").equals("OrdersActivity")) {
+            if (getIntent().getStringExtra("activityFrom").equals("OrdersActivity")) {
                 intent = new Intent(SignInActivity.this, OrdersActivity.class);
                 intent.putExtra("m_User", i_User);
                 intent.putExtra("booksList", m_ListBooks);
                 startActivity(intent);
-            } else if (getIntent().getStringExtra("ActivityFrom").equals("BookActivity")) {
+            } else if (getIntent().getStringExtra("activityFrom").equals("BookActivity")) {
                 intent = new Intent(SignInActivity.this, BookActivity.class);
                 intent.putExtra("m_User", i_User);
                 intent.putExtra("booksList", m_ListBooks);
@@ -328,17 +328,17 @@ public class SignInActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnGoogleLogin = findViewById(R.id.etGoogleButton);
         m_FirebaseAuth = FirebaseAuth.getInstance();
-        m_ComeHereFromGuestExit = getIntent().getStringExtra("ActivityFrom") != null;
+        m_ComeHereFromGuestExit = getIntent().getStringExtra("activityFrom") != null;
     }
 
     private void checkIfComeFromGuest() {
         if (m_ComeHereFromGuestExit) {
-            if (getIntent().getStringExtra("ActivityFrom").equals("BookActivity")) {
+            if (getIntent().getStringExtra("activityFrom").equals("BookActivity")) {
                 txtContinueGuest.setVisibility(View.GONE);
                 m_BookFromGuest = (Book) getIntent().getSerializableExtra("choseBook");
                 m_ListBooks = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
 
-            } else if (getIntent().getStringExtra("ActivityFrom").equals("OrdersActivity")) {
+            } else if (getIntent().getStringExtra("activityFrom").equals("OrdersActivity")) {
                 txtContinueGuest.setVisibility(View.GONE);
                 m_ListBooks = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
             }

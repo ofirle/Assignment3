@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ol.assignment2.adapter.RecyclerViewAdapter;
 import com.example.ol.assignment2.model.Book;
@@ -52,7 +51,6 @@ public class AllBooksActivity extends AppCompatActivity {
     private TextView txtMinReviews, txtMaxPriceSelectedFilter;
     private TextView txtDownloads, txtPrice;
     private Button btnSubmitFilter;
-    private Dialog m_Dialog = new Dialog(AllBooksActivity.this);
 
     private int m_NumOfMinDownloads = 0;
     private double m_MaxPriceFilter;
@@ -62,7 +60,6 @@ public class AllBooksActivity extends AppCompatActivity {
     private SortArrayListFields m_Salf = new SortArrayListFields();
     private FirebaseUser m_FbUser;
     private User m_User;
-    private  Context m_Context;
     private DatabaseReference m_MyUserRef;
 
     @Override
@@ -84,7 +81,7 @@ public class AllBooksActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        checkUser();
+    checkUser();
         ivFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,15 +100,17 @@ public class AllBooksActivity extends AppCompatActivity {
 
 
     private void initRecyclerView(ArrayList<Book> lst) {
+
         RecyclerView rvBookList = (RecyclerView) findViewById(R.id.rv_book_list);
         rvBookList.setLayoutManager(new GridLayoutManager(this, 3));
-        m_Context = rvBookList.getContext();
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(m_Context, R.anim.layout_slide_from_left);
+        Context context = rvBookList.getContext();
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_slide_from_left);
         RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lst, m_User, classStringName, m_MyFont, m_ListBooks);
         rvBookList.setAdapter(myAdapter);
         rvBookList.setLayoutAnimation(controller);
         rvBookList.getAdapter().notifyDataSetChanged();
         rvBookList.scheduleLayoutAnimation();
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -136,7 +135,6 @@ public class AllBooksActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_signOut:
                             signOutFirebase();
-                            Toast.makeText(AllBooksActivity.this, "Sign out success.", Toast.LENGTH_LONG).show();
                             intent = new Intent(AllBooksActivity.this, SignInActivity.class);
                             startActivity(intent);
                             break;
@@ -176,7 +174,27 @@ public class AllBooksActivity extends AppCompatActivity {
     }
 
     private void FilterBooks() {
-        initTheFilter();
+        final Dialog dialog = new Dialog(AllBooksActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.filter_books);
+
+
+        txtDownloads = (TextView) dialog.findViewById(R.id.txtDownloads);
+        txtPrice = (TextView) dialog.findViewById(R.id.txtPrice);
+        ivClose = (ImageView) dialog.findViewById(R.id.ivCloseFilter);
+        sbPrice = (SeekBar) dialog.findViewById(R.id.sbPrice);
+        upArrow = (ImageView) dialog.findViewById(R.id.ivArrowUp);
+        downArrow = (ImageView) dialog.findViewById(R.id.ivArrowDown);
+        txtMinReviews = (TextView) dialog.findViewById(R.id.txtMinReviews);
+        txtMaxPriceSelectedFilter = (TextView) dialog.findViewById(R.id.txtMaxPriceSelectedFilter);
+        btnSubmitFilter = (Button) dialog.findViewById(R.id.btnSubmitFilter);
+
+        txtDownloads.setTypeface(m_MyFont);
+        txtPrice.setTypeface(m_MyFont);
+        txtMinReviews.setTypeface(m_MyFont);
+        txtMaxPriceSelectedFilter.setTypeface(m_MyFont);
+        btnSubmitFilter.setTypeface(m_MyFont);
+
         upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +214,9 @@ public class AllBooksActivity extends AppCompatActivity {
             }
         });
 
-        initTheSeekBar();
+        sbPrice.setProgress(100);
+        m_MaxPriceFilter = 10.0;
+        txtMaxPriceSelectedFilter.setText(Double.toString(m_MaxPriceFilter) + '$');
 
         sbPrice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -224,24 +244,26 @@ public class AllBooksActivity extends AppCompatActivity {
                     if (book.getPrice() <= m_MaxPriceFilter && book.getDownloads() >= m_NumOfMinDownloads)
                         m_ListSortedBook.add(book);
                 }
-                m_Dialog.dismiss();
+                dialog.dismiss();
                 initRecyclerView(m_ListSortedBook);
             }
         });
+
 
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 m_MaxPriceFilter = 10.0;
                 m_NumOfMinDownloads = 0;
-                m_Dialog.dismiss();
+                dialog.dismiss();
             }
         });
-        m_Dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        m_Dialog.show();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
-    private void initUI() {
+    private void initUI()
+    {
         m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -252,7 +274,8 @@ public class AllBooksActivity extends AppCompatActivity {
         ivFilter = (ImageView) findViewById(R.id.ivFilter);
     }
 
-    private void checkPosition(int i_Position) {
+    private void checkPosition(int i_Position)
+    {
         switch (i_Position) {
             case 1:
                 m_ListSortedBook = m_Salf.sortPriceLowToHigh(m_ListBooks);
@@ -266,7 +289,8 @@ public class AllBooksActivity extends AppCompatActivity {
         }
     }
 
-    private void checkUser() {
+    private void checkUser()
+    {
         m_FbUser = FirebaseAuth.getInstance().getCurrentUser();
         if (m_FbUser == null) {
             Intent intent = new Intent(AllBooksActivity.this, SignInActivity.class);
@@ -285,30 +309,5 @@ public class AllBooksActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private void initTheFilter() {
-        m_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        m_Dialog.setContentView(R.layout.filter_books);
-        txtDownloads = (TextView) m_Dialog.findViewById(R.id.txtDownloads);
-        txtPrice = (TextView) m_Dialog.findViewById(R.id.txtPrice);
-        ivClose = (ImageView) m_Dialog.findViewById(R.id.ivCloseFilter);
-        sbPrice = (SeekBar) m_Dialog.findViewById(R.id.sbPrice);
-        upArrow = (ImageView) m_Dialog.findViewById(R.id.ivArrowUp);
-        downArrow = (ImageView) m_Dialog.findViewById(R.id.ivArrowDown);
-        txtMinReviews = (TextView) m_Dialog.findViewById(R.id.txtMinReviews);
-        txtMaxPriceSelectedFilter = (TextView) m_Dialog.findViewById(R.id.txtMaxPriceSelectedFilter);
-        btnSubmitFilter = (Button) m_Dialog.findViewById(R.id.btnSubmitFilter);
-        txtDownloads.setTypeface(m_MyFont);
-        txtPrice.setTypeface(m_MyFont);
-        txtMinReviews.setTypeface(m_MyFont);
-        txtMaxPriceSelectedFilter.setTypeface(m_MyFont);
-        btnSubmitFilter.setTypeface(m_MyFont);
-    }
-
-    private void initTheSeekBar() {
-        sbPrice.setProgress(100);
-        m_MaxPriceFilter = 10.0;
-        txtMaxPriceSelectedFilter.setText(Double.toString(m_MaxPriceFilter) + '$');
     }
 }

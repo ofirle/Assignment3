@@ -156,7 +156,7 @@ public class OrdersActivity extends AppCompatActivity {
             signOutFirebase();
             m_User = null;
             Intent intent2 = new Intent(OrdersActivity.this, SignInActivity.class);
-            intent2.putExtra("ActivityFrom", classStringName);
+            intent2.putExtra("activityFrom", classStringName);
             intent2.putExtra("booksList", m_ListBook);
             Toast.makeText(OrdersActivity.this, "You must sign in for enter to your orders.", Toast.LENGTH_LONG);
             startActivity(intent2);

@@ -58,7 +58,6 @@ public class BookActivity extends AppCompatActivity {
     private Button btnSubmitReview;
     private RatingBar ratingBarBook, ratingReviewBar;
 
-    private Dialog m_DialogReview = new Dialog(BookActivity.this);
     private Typeface m_MyFont;
     private ArrayList<Review> m_ListReview;
     private FirebaseUser m_FbUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -73,14 +72,48 @@ public class BookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
-        getPutExtras();
+        //getPutExtras();
+        Intent intent = getIntent();
+        m_TheBook = (Book) intent.getSerializableExtra("choseBook");
+        m_User = (User) intent.getSerializableExtra("m_User");
+        m_ListBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
+        m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
+        m_ActivityFrom = intent.getStringExtra("activityFrom");
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        Menu menu = bottomNav.getMenu();
+        MenuItem menuItem = menu.getItem(checkActivityFrom(m_ActivityFrom));
+        menuItem.setChecked(true);
         initUI();
-        initBookDisplay();
+        final int idBook = m_TheBook.getId();
+        final String Title = m_TheBook.getTitle();
+        String Author = m_TheBook.getAuthor();
+        String Genre = m_TheBook.getGenre();
+        int Pages = m_TheBook.getPages();
+        int Year = m_TheBook.getYear();
+        int Downloads = m_TheBook.getDownloads();
+        String Image = m_TheBook.getImg();
+        double Rating = m_TheBook.getRating();
+        double Price = m_TheBook.getPrice();
+        final String pdf = m_TheBook.getPdf();
+        ratingBarBook.setRating(Float.parseFloat(Double.toString(m_TheBook.getRating())));
+        tvTitle.setText(Title);
+        tvAuthor.setText(Author);
+        tvGenre.setText(Genre);
+        tvPages.setText(Integer.toString(Pages) + " Pages");
+        tvYear.setText(Integer.toString(Year));
+        tvDownload.setText(Integer.toString(Downloads));
+        Uri myUri = Uri.parse(Image);
+        Picasso.with(BookActivity.this).load(myUri).into(ivBookCover);
+        ivBookCover.setScaleType(ImageView.ScaleType.FIT_XY);
+        boolean Bought = checkIfBought();
+        buttonsSetChecker(Bought, Price);
+        getReviews();
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(m_TheBook.getPdf()));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
                 startActivity(browserIntent);
             }
         });
@@ -89,9 +122,9 @@ public class BookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (m_User.getEmail().equals("guest")) {
-                    signOutGuest();
+                   signOutGuest();
                 } else {
-                    userBuyBook();
+                   userBuyBook();
                 }
             }
         });
@@ -99,8 +132,9 @@ public class BookActivity extends AppCompatActivity {
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeReview(m_TheBook.getTitle());
+                writeReview(Title);
             }
+
         });
     }
 
@@ -139,13 +173,13 @@ public class BookActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_signOut:
                             signOutFirebase();
-                            Toast.makeText(BookActivity.this, "Sign out success.", Toast.LENGTH_LONG).show();
                             intent = new Intent(BookActivity.this, SignInActivity.class);
                             break;
                         case R.id.nav_home:
                             intent = new Intent(BookActivity.this, BookLibraryActivity.class);
                             break;
                     }
+
                     startActivity(intent);
                     return true;
                 }
@@ -219,24 +253,60 @@ public class BookActivity extends AppCompatActivity {
         tvTotalRatingTxt.setText("(" + Integer.toString(reviewsCounter) + ")");
     }
 
-    private void writeReview(String i_Title) {
-        writeReviewSetUI(i_Title);
+    private void writeReview(String Title) {
+        final Dialog dialog = new Dialog(BookActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.add_review);
+
+        ivClose = (ImageView) dialog.findViewById(R.id.ivCloseReview);
+        tvBookName = (TextView) dialog.findViewById(R.id.tvBookNameReview);
+        etTextReview = (EditText) dialog.findViewById(R.id.etTextReview);
+        btnSubmitReview = (Button) dialog.findViewById(R.id.btnSubmitReview);
+        ratingReviewBar = (RatingBar) dialog.findViewById(R.id.ratingBarReview);
+        tvBookName.setText(Title);
+        tvBookName.setTypeface(m_MyFont);
+        etTextReview.setTypeface(m_MyFont);
+        btnSubmitReview.setTypeface(m_MyFont);
 
         btnSubmitReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeNewReview();
+                Review newReview = new Review(m_User.getEmail(), m_FbUser.getUid(), getDateWithoutTimeUsingCalendar(), etTextReview.getText().toString(), ratingReviewBar.getRating());
+                m_ListReview.add(newReview);
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Books").child(Integer.toString(m_TheBook.getId()));
+                final DatabaseReference mReviewsBookDatabase = mDatabase.child("Reviews");
+                mReviewsBookDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mReviewsBookDatabase.setValue(m_ListReview);
+                        btnReview.setVisibility(View.GONE);
+                        updateTheRatingOnDatabase(ratingReviewBar.getRating());
+                        Toast toast = Toast.makeText(BookActivity.this, "Thank You for Your Review!", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                        toast.show();
+                        tvBetheFirst.setVisibility(View.INVISIBLE);
+                        dialog.dismiss();
+                        initRecyclerView();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m_DialogReview.dismiss();
+                dialog.dismiss();
             }
         });
-        m_DialogReview.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        m_DialogReview.show();
+
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     public static String getDateWithoutTimeUsingCalendar() {
@@ -263,6 +333,7 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void signOutFirebase() {
         FirebaseAuth.getInstance().signOut();
@@ -313,122 +384,63 @@ public class BookActivity extends AppCompatActivity {
     }
 
     private void getPutExtras() {
-        Intent intent = getIntent();
-        m_TheBook = (Book) intent.getSerializableExtra("choseBook");
-        m_User = (User) intent.getSerializableExtra("m_User");
-        m_ListBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
-        m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
-        m_ActivityFrom = intent.getStringExtra("m_ActivityFrom");
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-        Menu menu = bottomNav.getMenu();
-        MenuItem menuItem = menu.getItem(checkActivityFrom(m_ActivityFrom));
-        menuItem.setChecked(true);
+
 
     }
 
-    private void initBookDisplay() {
-        final int idBook = m_TheBook.getId();
-        final String Title = m_TheBook.getTitle();
-        String Author = m_TheBook.getAuthor();
-        String Genre = m_TheBook.getGenre();
-        int Pages = m_TheBook.getPages();
-        int Year = m_TheBook.getYear();
-        int Downloads = m_TheBook.getDownloads();
-        String Image = m_TheBook.getImg();
-        double Rating = m_TheBook.getRating();
-        double Price = m_TheBook.getPrice();
-        final String pdf = m_TheBook.getPdf();
-        ratingBarBook.setRating(Float.parseFloat(Double.toString(m_TheBook.getRating())));
-        tvTitle.setText(Title);
-        tvAuthor.setText(Author);
-        tvGenre.setText(Genre);
-        tvPages.setText(Integer.toString(Pages) + " Pages");
-        tvYear.setText(Integer.toString(Year));
-        tvDownload.setText(Integer.toString(Downloads));
-        Uri myUri = Uri.parse(Image);
-        Picasso.with(BookActivity.this).load(myUri).into(ivBookCover);
-        ivBookCover.setScaleType(ImageView.ScaleType.FIT_XY);
-        boolean Bought = checkIfBought();
-        buttonsSetChecker(Bought, Price);
-        getReviews();
+    private void initBookDisplay()
+    {
+
     }
 
-    private void signOutGuest() {
+    private void signOutGuest()
+    {
         signOutFirebase();
         m_User = null;
-
         Intent intent = new Intent(BookActivity.this, SignInActivity.class);
-        intent.putExtra("ActivityFrom", classStringName);
+        intent.putExtra("activityFrom", classStringName);
         intent.putExtra("choseBook", m_TheBook);
         intent.putExtra("booksList", m_ListBook);
         Toast.makeText(BookActivity.this, "You must sign in before purchase.", Toast.LENGTH_LONG);
         startActivity(intent);
     }
 
-    private void userBuyBook() {
-        if (m_User.getMyBooks() == null) {
-            List<Integer> myBooksID = new ArrayList<>();
-            myBooksID.add(m_TheBook.getId());
-            m_User.setMyBooks(myBooksID);
+    private void userBuyBook()
+    {
+        if (m_User.getEmail().equals("guest")) {
+            signOutFirebase();
+            m_User = null;
+            Intent intent = new Intent(BookActivity.this, SignInActivity.class);
+            intent.putExtra("activityFrom", classStringName);
+            intent.putExtra("choseBook", m_TheBook);
+            intent.putExtra("booksList", m_ListBook);
+            Toast.makeText(BookActivity.this, "You must sign in before purchase.", Toast.LENGTH_LONG);
+            startActivity(intent);
         } else {
-            m_User.getMyBooks().add(m_TheBook.getId());
-        }
-        m_User.setTotalPurchase(m_User.getTotalPurchase() + 1);
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
-        DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference("Books").child(Integer.toString(m_TheBook.getId()));
-        m_TheBook.setDownloads(m_TheBook.getDownloads() + 1);
-        bookRef.child("downloads").setValue(m_TheBook.getDownloads());
-        tvDownload.setText(Integer.toString(m_TheBook.getDownloads()));
-        Toast toast = Toast.makeText(BookActivity.this, "Successfully Purchased", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
-        btnReview.setVisibility(View.VISIBLE);
-        if (m_ListReview.size() == 0) {
-            tvBetheFirst.setVisibility(View.VISIBLE);
-        }
-        buttonsSetChecker(true, m_TheBook.getPrice());
-    }
-
-    private void writeReviewSetUI(String i_Title) {
-        m_DialogReview.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        m_DialogReview.setContentView(R.layout.add_review);
-        ivClose = (ImageView) m_DialogReview.findViewById(R.id.ivCloseReview);
-        tvBookName = (TextView) m_DialogReview.findViewById(R.id.tvBookNameReview);
-        etTextReview = (EditText) m_DialogReview.findViewById(R.id.etTextReview);
-        btnSubmitReview = (Button) m_DialogReview.findViewById(R.id.btnSubmitReview);
-        ratingReviewBar = (RatingBar) m_DialogReview.findViewById(R.id.ratingBarReview);
-        tvBookName.setText(i_Title);
-        tvBookName.setTypeface(m_MyFont);
-        etTextReview.setTypeface(m_MyFont);
-        btnSubmitReview.setTypeface(m_MyFont);
-    }
-
-    private void writeNewReview() {
-        Review newReview = new Review(m_User.getEmail(), m_FbUser.getUid(), getDateWithoutTimeUsingCalendar(), etTextReview.getText().toString(), ratingReviewBar.getRating());
-        m_ListReview.add(newReview);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Books").child(Integer.toString(m_TheBook.getId()));
-        final DatabaseReference mReviewsBookDatabase = mDatabase.child("Reviews");
-        mReviewsBookDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mReviewsBookDatabase.setValue(m_ListReview);
-                btnReview.setVisibility(View.GONE);
-                updateTheRatingOnDatabase(ratingReviewBar.getRating());
-                Toast toast = Toast.makeText(BookActivity.this, "Thank You for Your Review!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                toast.show();
-                tvBetheFirst.setVisibility(View.INVISIBLE);
-                m_DialogReview.dismiss();
-                initRecyclerView();
+            if (m_User.getMyBooks() == null) {
+                List<Integer> myBooksID = new ArrayList<>();
+                myBooksID.add(m_TheBook.getId());
+                m_User.setMyBooks(myBooksID);
+            } else {
+                m_User.getMyBooks().add(m_TheBook.getId());
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            m_User.setTotalPurchase( m_User.getTotalPurchase() + 1);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+            userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
+            DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference("Books").child(Integer.toString(m_TheBook.getId()));
+            m_TheBook.setDownloads(m_TheBook.getDownloads()+1);
+            bookRef.child("downloads").setValue(m_TheBook.getDownloads());
+            tvDownload.setText(Integer.toString(m_TheBook.getDownloads()));
+            Toast toast=Toast.makeText(BookActivity.this, "Successfully Purchased", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.show();
+            btnReview.setVisibility(View.VISIBLE);
+            if(m_ListReview.size()==0)
+            {
+                tvBetheFirst.setVisibility(View.VISIBLE);
             }
-        });
+            buttonsSetChecker(true, m_TheBook.getPrice());
+        }
     }
 }
 
