@@ -1,4 +1,5 @@
 package com.example.ol.assignment2.model;
+
 import com.example.ol.assignment2.model.Book;
 
 public class Order {
@@ -6,12 +7,14 @@ public class Order {
     private String date;
     private boolean wroteReview;
 
+    // C'Tor.
     public Order(Book book, String date, boolean wroteReview) {
         this.book = book;
         this.date = date;
         this.wroteReview = wroteReview;
     }
 
+ // Getters & Setters.
     public Book getBook() {
         return book;
     }

@@ -5,29 +5,23 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ol.assignment2.model.Book;
 import com.example.ol.assignment2.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignUp extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private TextView txtLogin, txtSignUp;
     private FirebaseAuth mAuth;
@@ -37,18 +31,12 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        Typeface myFont;
-        txtLogin = (TextView) findViewById(R.id.txtLogin);
-        txtSignUp = (TextView) findViewById(R.id.txtSignUp);
-        myFont = Typeface.createFromAsset(this.getAssets(), "fonts/impact.ttf");
-        txtLogin.setTypeface(myFont);
-        txtSignUp.setTypeface(myFont);
-        mAuth = FirebaseAuth.getInstance();
+        initCreate();
 
         txtLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignUp.this, SignIn.class);
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                 startActivity(intent);
             }
         });
@@ -66,14 +54,9 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                                User theUser = new User(mAuth.getCurrentUser().getEmail(), 0,null);
-                                userRef.child(mAuth.getCurrentUser().getUid()).setValue(theUser);
-                                Toast.makeText(SignUp.this, "Register is successfully!", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(SignUp.this, BookLibrary.class);
-                                startActivity(intent);
+                                afterSignUpSuccess();
                             } else {
-                                Toast.makeText(SignUp.this, task.getException().getMessage(),
+                                Toast.makeText(SignUpActivity.this, task.getException().getMessage(),
                                         Toast.LENGTH_LONG).show();
                             }
                         }
@@ -96,7 +79,6 @@ public class SignUp extends AppCompatActivity {
         String noteError = "";
         boolean checkFields = true;
 
-
         if (!valEmail(emailInput)) {
             checkFields = false;
             noteError += "- Email address is'nt valid.\n";
@@ -118,5 +100,24 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), noteError, Toast.LENGTH_LONG).show();
 
         return checkFields;
+    }
+
+    private void afterSignUpSuccess() {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+        User theUser = new User(mAuth.getCurrentUser().getEmail(), 0, null);
+        userRef.child(mAuth.getCurrentUser().getUid()).setValue(theUser);
+        Toast.makeText(SignUpActivity.this, "Register is successfully!", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+        startActivity(intent);
+    }
+
+    private void initCreate() {
+        Typeface myFont;
+        txtLogin = (TextView) findViewById(R.id.txtLogin);
+        txtSignUp = (TextView) findViewById(R.id.txtSignUp);
+        myFont = Typeface.createFromAsset(this.getAssets(), "fonts/impact.ttf");
+        txtLogin.setTypeface(myFont);
+        txtSignUp.setTypeface(myFont);
+        mAuth = FirebaseAuth.getInstance();
     }
 }

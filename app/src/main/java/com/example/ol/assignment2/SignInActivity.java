@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ol.assignment2.model.Book;
 import com.example.ol.assignment2.model.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -37,35 +38,41 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignIn extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
     private TextView txtSignIn, txtSignUp, txtContinueGuest;
     private ImageView ivGoogleIcon;
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private SignInButton btnGoogleLogin;
-    private FirebaseAuth firebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private LoginButton btnFacebookLogin;
-    private CallbackManager callbackManager;
-    private boolean allow_anonymous_user = true;
+
+    private FirebaseAuth m_FirebaseAuth;
+    private DatabaseReference m_MyUserRef;
+    private CallbackManager m_CallbackManager;
+    private boolean m_Allow_anonymous_user = true;
+    private boolean m_ComeHereFromGuestExit = false;
+    private User m_User;
+    private ArrayList<Book> m_ListBooks;
+    private Book m_BookFromGuest;
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if m_User is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            Intent intent = new Intent(SignIn.this, BookLibrary.class);
+            Intent intent = new Intent(SignInActivity.this, BookLibraryActivity.class);
             startActivity(intent);
         }
     }
@@ -76,24 +83,9 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-        Typeface myFont;
-        ivGoogleIcon = (ImageView) findViewById(R.id.ivGoogleIcon);
-        txtSignIn = (TextView) findViewById(R.id.txtLogin);
-        txtSignUp = (TextView) findViewById(R.id.txtSignUp);
-        txtContinueGuest = findViewById(R.id.txtContinueGuest);
-        myFont = Typeface.createFromAsset(this.getAssets(), "fonts/impact.ttf");
-        txtSignIn.setTypeface(myFont);
-        txtSignUp.setTypeface(myFont);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnGoogleLogin = findViewById(R.id.etGoogleButton);
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = firebaseAuth.getCurrentUser();
-
-        if (allow_anonymous_user == true) {
-            txtContinueGuest.setVisibility(View.VISIBLE);
-        }
+        initCreate();
+        checkIfComeFromGuest();
+        FirebaseUser mUser = m_FirebaseAuth.getCurrentUser();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -107,25 +99,7 @@ public class SignIn extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validInput(etEmail.getText().toString(), etPassword.getText().toString())) {
-                    final ProgressDialog progressDialog = ProgressDialog.show(SignIn.this, "Please wait...", "Proccessing...", true);
-                    (firebaseAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString()))
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressDialog.dismiss();
-
-                                    if (task.isSuccessful()) {
-                                        ToastToScreen("User logged successfully!");
-                                        Intent intent = new Intent(SignIn.this, BookLibrary.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Log.e("ERROR", task.getException().toString());
-                                        ToastToScreen("User name or password is not correct.");
-                                    }
-                                }
-                            });
-                }
+                afterClickOnLoginButton();
             }
         });
 
@@ -142,7 +116,7 @@ public class SignIn extends AppCompatActivity {
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignIn.this, SignUp.class);
+                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
         });
@@ -151,9 +125,7 @@ public class SignIn extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // if is google login.
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 101) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -162,32 +134,28 @@ public class SignIn extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
 
-                // ...
             }
         } else { // if is facebook login
-            callbackManager.onActivityResult(requestCode, resultCode, data);
+            m_CallbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential)
+        m_FirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, update UI with the signed-in m_User's information
                             boolean isNewUser = false;
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
                             isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-                            if (isNewUser)
-                            {
+                            if (isNewUser) {
                                 transferDetailsToDatabase();
                             }
                             ToastToScreen("User logged successfully with Google!");
-                            Intent intent = new Intent(SignIn.this, BookLibrary.class);
-                            startActivity(intent);
+                            intentToApplication(user);
                         } else {
                             ToastToScreen("Failed login with google account.");
                         }
@@ -201,13 +169,12 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void OnClickFacebookLogin(View v) {
-        callbackManager = CallbackManager.Factory.create();
+        m_CallbackManager = CallbackManager.Factory.create();
         btnFacebookLogin = findViewById(R.id.etFacebookButton);
         btnFacebookLogin.setReadPermissions("email", "public_profile");
-        btnFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        btnFacebookLogin.registerCallback(m_CallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // transferDetailsToDatabase();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -222,7 +189,7 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void onClickResetPassword(View v) {
-        Intent intent = new Intent(SignIn.this, resetPassword.class);
+        Intent intent = new Intent(SignInActivity.this, resetPasswordActivity.class);
         startActivity(intent);
     }
 
@@ -236,28 +203,23 @@ public class SignIn extends AppCompatActivity {
 
         Log.d(null, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        firebaseAuth.signInWithCredential(credential)
+        m_FirebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             boolean isNewUser = false;
                             ToastToScreen("User logged successfully with Facebook!");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
                             isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-                            if (isNewUser)
-                            {
+                            if (isNewUser) {
                                 transferDetailsToDatabase();
                             }
-                            Intent intent = new Intent(SignIn.this, BookLibrary.class);
-                            startActivity(intent);
+                            intentToApplication(user);
 
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(null, "signInWithCredential:failure", task.getException());
                             ToastToScreen("Authentication failed.");
-
                         }
                     }
                 });
@@ -285,36 +247,125 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void ToastToScreen(String msg) {
-        Toast.makeText(SignIn.this, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_LONG).show();
     }
 
 
     public void OnClickGuestUser(View v) {
-        firebaseAuth.signInAnonymously()
+        m_FirebaseAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            // Sign in success, update UI with the signed-in m_User's information
+                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
                             ToastToScreen("User logged successfully as guest!");
-                            Intent intent = new Intent(SignIn.this, BookLibrary.class);
+                            Intent intent = new Intent(SignInActivity.this, BookLibraryActivity.class);
                             startActivity(intent);
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(SignIn.this, "Authentication failed.",
+                            // If sign in fails, display a message to the m_User.
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
 
-
-        public void transferDetailsToDatabase()
-        {
+    public void transferDetailsToDatabase() {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-        userRef.child(firebaseAuth.getCurrentUser().getUid()).setValue(new User(firebaseAuth.getCurrentUser().getEmail(),0,null));
+        userRef.child(m_FirebaseAuth.getCurrentUser().getUid()).setValue(new User(m_FirebaseAuth.getCurrentUser().getEmail(), 0, null));
     }
 
+
+    private void intentToApplicationHelper(User i_User) {
+        Intent intent;
+        if (m_ComeHereFromGuestExit == false) {
+            intent = new Intent(SignInActivity.this, BookLibraryActivity.class);
+            startActivity(intent);
+        } else {
+            if (getIntent().getStringExtra("ActivityFrom").equals("OrdersActivity")) {
+                intent = new Intent(SignInActivity.this, OrdersActivity.class);
+                intent.putExtra("m_User", i_User);
+                intent.putExtra("booksList", m_ListBooks);
+                startActivity(intent);
+            } else if (getIntent().getStringExtra("ActivityFrom").equals("BookActivity")) {
+                intent = new Intent(SignInActivity.this, BookActivity.class);
+                intent.putExtra("m_User", i_User);
+                intent.putExtra("booksList", m_ListBooks);
+                intent.putExtra("choseBook", m_BookFromGuest);
+                intent.putExtra("activityFrom", "SignInActivity");
+                startActivity(intent);
+            }
+        }
     }
+
+    private void intentToApplication(FirebaseUser i_User) {
+        m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + i_User.getUid());
+        m_MyUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                m_User = snapshot.getValue(User.class);
+                intentToApplicationHelper(m_User);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void initCreate() {
+        Typeface myFont;
+        ivGoogleIcon = (ImageView) findViewById(R.id.ivGoogleIcon);
+        txtSignIn = (TextView) findViewById(R.id.txtLogin);
+        txtSignUp = (TextView) findViewById(R.id.txtSignUp);
+        txtContinueGuest = findViewById(R.id.txtContinueGuest);
+        myFont = Typeface.createFromAsset(this.getAssets(), "fonts/impact.ttf");
+        txtSignIn.setTypeface(myFont);
+        txtSignUp.setTypeface(myFont);
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnGoogleLogin = findViewById(R.id.etGoogleButton);
+        m_FirebaseAuth = FirebaseAuth.getInstance();
+        m_ComeHereFromGuestExit = getIntent().getStringExtra("ActivityFrom") != null;
+    }
+
+    private void checkIfComeFromGuest() {
+        if (m_ComeHereFromGuestExit) {
+            if (getIntent().getStringExtra("ActivityFrom").equals("BookActivity")) {
+                txtContinueGuest.setVisibility(View.GONE);
+                m_BookFromGuest = (Book) getIntent().getSerializableExtra("choseBook");
+                m_ListBooks = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
+
+            } else if (getIntent().getStringExtra("ActivityFrom").equals("OrdersActivity")) {
+                txtContinueGuest.setVisibility(View.GONE);
+                m_ListBooks = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
+            }
+        } else if (m_Allow_anonymous_user == true) {
+            txtContinueGuest.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void afterClickOnLoginButton() {
+        if (validInput(etEmail.getText().toString(), etPassword.getText().toString())) {
+            final ProgressDialog progressDialog = ProgressDialog.show(SignInActivity.this, "Please wait...", "Proccessing...", true);
+            (m_FirebaseAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString()))
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
+
+                            if (task.isSuccessful()) {
+                                ToastToScreen("User logged successfully!");
+                                intentToApplication(m_FirebaseAuth.getCurrentUser());
+                            } else {
+                                Log.e("ERROR", task.getException().toString());
+                                ToastToScreen("User name or password is not correct.");
+                            }
+                        }
+                    });
+        }
+    }
+}
 

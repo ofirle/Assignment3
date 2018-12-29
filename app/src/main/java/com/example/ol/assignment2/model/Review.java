@@ -1,5 +1,6 @@
 package com.example.ol.assignment2.model;
 
+
 public class Review {
     private String Name;
     private String UserID; // Because GetUID is String
@@ -7,21 +8,22 @@ public class Review {
     private String TextReview;
     private double ScoreReview;
 
-    public Review()
-    {
+    public Review() {
 
     }
 
-    public Review(String name, String userID, String date, String textReview,double scoreReview) {
-        Name = name;
-        UserID = userID;
-        Date = date;
-        TextReview = textReview;
-        ScoreReview=scoreReview;
+
+    // C'tor.
+    public Review(String i_Name, String i_UserID, String i_Date, String i_TextReview, double i_ScoreReview) {
+        Name = i_Name;
+        UserID = i_UserID;
+        Date = i_Date;
+        TextReview = i_TextReview;
+        ScoreReview = i_ScoreReview;
     }
 
 
-
+    // Getters & Setters.
     public double getScoreReview() {
 
         return ScoreReview;
@@ -58,6 +60,7 @@ public class Review {
     public void setTextReview(String textReview) {
         TextReview = textReview;
     }
+
     public void setScoreReview(double scoreReview) {
         ScoreReview = scoreReview;
     }

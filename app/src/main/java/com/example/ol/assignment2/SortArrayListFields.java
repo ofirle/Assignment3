@@ -37,9 +37,7 @@ public class SortArrayListFields {
         return lst;
     }
 
-
-    public ArrayList<Book> sortPriceLowToHigh(ArrayList<Book> lst)
-    {
+    public ArrayList<Book> sortPriceLowToHigh(ArrayList<Book> lst) {
         Collections.sort(lst, new Comparator<Book>() {
             @Override
             public int compare(Book o1, Book o2) {
@@ -74,7 +72,6 @@ public class SortArrayListFields {
     }
 
 
-
     public ArrayList<Order> sortBookName(ArrayList<Order> lst) {
         Collections.sort(lst, new Comparator<Order>() {
             @Override
@@ -103,9 +100,9 @@ public class SortArrayListFields {
         Collections.sort(lst, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
-                if(o1.getBook().getPrice()<o2.getBook().getPrice())
+                if (o1.getBook().getPrice() < o2.getBook().getPrice())
                     return -1;
-                if(o1.getBook().getPrice()>o2.getBook().getPrice())
+                if (o1.getBook().getPrice() > o2.getBook().getPrice())
                     return 1;
                 return 0;
             }

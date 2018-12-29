@@ -17,12 +17,15 @@ public class User implements Serializable {
 
     }
 
-    public User(String email, int totalPurchase, List<Integer> myBooksID) {
-        this.email = email;
-        this.totalPurchase = totalPurchase;
-        this.myBooksID = myBooksID;
+    //C'tor.
+    public User(String i_Email, int i_TotalPurchase, List<Integer> i_MyBooksID) {
+        this.email = i_Email;
+        this.totalPurchase = i_TotalPurchase;
+        this.myBooksID = i_MyBooksID;
     }
 
+
+    // Getters & Setters.
     public List<Integer> getMyBooks() {
         return this.myBooksID;
     }
@@ -30,7 +33,6 @@ public class User implements Serializable {
     public int getTotalPurchase() {
         return totalPurchase;
     }
-
 
     public void setTotalPurchase(int totalPurchase) {
         this.totalPurchase = totalPurchase;
@@ -49,12 +51,9 @@ public class User implements Serializable {
         this.totalPurchase += newPurcahsePrice;
     }
 
-
     public User(Parcel in) {
         this.email = in.readString();
         this.totalPurchase = in.readInt();
         in.readList(myBooksID, String.class.getClassLoader());
     }
-
-
 }

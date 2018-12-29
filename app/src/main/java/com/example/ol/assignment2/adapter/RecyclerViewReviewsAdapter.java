@@ -16,15 +16,15 @@ import com.example.ol.assignment2.model.Review;
 
 import java.util.List;
 
-public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerViewReviewsAdapter.MyViewHolder> {
+public class RecyclerViewReviewsAdapter extends RecyclerView.Adapter<RecyclerViewReviewsAdapter.MyViewHolder> {
     private Context mContext;
     private List<Review> mData;
     private Typeface myFont;
 
-    public RecyclerViewReviewsAdapter(Context mcontext, List<Review> mdata,Typeface m_myFont) {
-        this.mContext = mcontext;
-        this.mData = mdata;
-        myFont= m_myFont;
+    public RecyclerViewReviewsAdapter(Context i_Context, List<Review> i_Data, Typeface i_MyFont) {
+        this.mContext = i_Context;
+        this.mData = i_Data;
+        myFont = i_MyFont;
     }
 
     @NonNull
@@ -32,10 +32,7 @@ public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerVi
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-
         view = mInflater.inflate(R.layout.item_review, viewGroup, false);
-
-
         return new RecyclerViewReviewsAdapter.MyViewHolder(view);
     }
 
@@ -47,10 +44,7 @@ public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerVi
         myViewHolder.txtNameReview.setTypeface(myFont);
         myViewHolder.txtDateReview.setTypeface(myFont);
         myViewHolder.txtTextReview.setTypeface(myFont);
-        myViewHolder.ratingBarReview.setRating((float)(mData.get(i).getScoreReview()));
-
-
-
+        myViewHolder.ratingBarReview.setRating((float) (mData.get(i).getScoreReview()));
     }
 
     @Override
@@ -63,14 +57,12 @@ public class RecyclerViewReviewsAdapter extends  RecyclerView.Adapter<RecyclerVi
         RatingBar ratingBarReview;
         CardView cardView;
 
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
             txtNameReview = (TextView) itemView.findViewById(R.id.txtNameReview);
             txtDateReview = (TextView) itemView.findViewById(R.id.txtDateReview);
             txtTextReview = (TextView) itemView.findViewById(R.id.txtTextReview);
-            ratingBarReview=(RatingBar) itemView.findViewById(R.id.ratingBarReview);
+            ratingBarReview = (RatingBar) itemView.findViewById(R.id.ratingBarReview);
             cardView = (CardView) itemView.findViewById(R.id.cardviewIDOrder);
         }
     }

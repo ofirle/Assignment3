@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +19,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class resetPassword extends AppCompatActivity {
-
+public class resetPasswordActivity extends AppCompatActivity {
     private EditText etMail;
     private TextView txtTitle;
 
@@ -74,7 +72,7 @@ public class resetPassword extends AppCompatActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Intent intent = new Intent(resetPassword.this, SignIn.class);
+                Intent intent = new Intent(resetPasswordActivity.this, SignInActivity.class);
                 startActivity(intent);
                 finish();
             }

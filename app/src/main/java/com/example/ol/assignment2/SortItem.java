@@ -7,7 +7,6 @@ public class SortItem {
     {
         mIconSort=IconSort;
     }
-
     public int getIconSort()
     {
         return mIconSort;

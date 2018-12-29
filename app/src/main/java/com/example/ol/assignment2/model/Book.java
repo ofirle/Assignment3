@@ -10,7 +10,6 @@ public class Book implements Serializable {
     private int id;
     private String Title;
     private String Author;
-
     private String pdf;
     private String Genre;
     private String img;
@@ -20,23 +19,25 @@ public class Book implements Serializable {
     private int Downloads;
     private int year;
 
-    public Book(){
+    public Book() {
     }
 
-    public Book(int id,String author,int downloads,String genre, String img,int pages, double price, double rating, String title, String pdf, int year) {
-        this.img = img;
-        this.id = id;
-        this.Title = title;
-        this.Author = author;
-        this.Genre = genre;
-        this.price = price;
-        this.Rating = rating;
-        this.Pages=pages;
-        this.Downloads=downloads;
-        this.year = year;
-        this.pdf = pdf;
+    // C'tor.
+    public Book(int i_Id, String i_Author, int i_Downloads, String i_Genre, String i_Img, int i_Pages, double i_Price, double i_Rating, String i_Title, String i_Pdf, int i_Year) {
+        this.img = i_Img;
+        this.id = i_Id;
+        this.Title = i_Title;
+        this.Author = i_Author;
+        this.Genre = i_Genre;
+        this.price = i_Price;
+        this.Rating = i_Rating;
+        this.Pages = i_Pages;
+        this.Downloads = i_Downloads;
+        this.year = i_Year;
+        this.pdf = i_Pdf;
     }
 
+    // Getters & Setters.
     public String getImg() {
         return img;
     }
@@ -53,13 +54,21 @@ public class Book implements Serializable {
         return Genre;
     }
 
-    public double getPrice() {return price;}
+    public double getPrice() {
+        return price;
+    }
 
-    public double getRating() {return Rating; }
+    public double getRating() {
+        return Rating;
+    }
 
-    public int getPages() {return Pages; }
+    public int getPages() {
+        return Pages;
+    }
 
-    public int getDownloads() {return Downloads; }
+    public int getDownloads() {
+        return Downloads;
+    }
 
     public String getPdf() {
         return pdf;
@@ -69,8 +78,9 @@ public class Book implements Serializable {
         this.pdf = pdf;
     }
 
-
-    public void setImg(String img) { this.img = img; }
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public void setTitle(String title) {
         Title = title;
@@ -84,19 +94,33 @@ public class Book implements Serializable {
         Genre = genre;
     }
 
-    public void setPrice(double price) { this.price = price; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-    public void setRating(double rating) { Rating = rating; }
+    public void setRating(double rating) {
+        Rating = rating;
+    }
 
-    public void setPages(int pages) { Pages = pages; }
+    public void setPages(int pages) {
+        Pages = pages;
+    }
 
-    public void setDownloads(int downloads) { Downloads = downloads; }
+    public void setDownloads(int downloads) {
+        Downloads = downloads;
+    }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public Book getBook() {return this;}
+    public Book getBook() {
+        return this;
+    }
 
     public int getYear() {
         return year;
@@ -106,7 +130,7 @@ public class Book implements Serializable {
         this.year = year;
     }
 
-    private Book(Parcel in){
+    private Book(Parcel in) {
         this.id = in.readInt();
         this.Title = in.readString();
         this.Author = in.readString();
@@ -117,9 +141,6 @@ public class Book implements Serializable {
         this.Rating = in.readDouble();
         this.Pages = in.readInt();
         this.Downloads = in.readInt();
-
     }
-
-
 }
 

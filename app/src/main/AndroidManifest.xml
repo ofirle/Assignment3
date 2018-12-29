@@ -11,15 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignIn" />
-        <activity android:name=".SignUp" />
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignUpActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -41,20 +41,19 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".resetPassword" />
-        <activity android:name=".AccountDetails" />
-        <activity android:name=".BookLibrary">
+        <activity android:name=".resetPasswordActivity" />
+        <activity android:name=".BookLibraryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Book_Activity" />
-        <activity android:name=".Orders_Activity" />
-        <activity android:name=".AllBooks_Activity" />
+        <activity android:name=".BookActivity" />
+        <activity android:name=".OrdersActivity" />
+        <activity android:name=".AllBooksActivity" />
         <activity android:name=".SearchAvtivity" />
-        <activity android:name=".Search_Activity"></activity>
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>
