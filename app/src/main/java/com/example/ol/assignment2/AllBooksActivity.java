@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ol.assignment2.adapter.RecyclerViewAdapter;
 import com.example.ol.assignment2.model.Book;
@@ -136,6 +137,7 @@ public class AllBooksActivity extends AppCompatActivity {
                         case R.id.nav_signOut:
                             signOutFirebase();
                             intent = new Intent(AllBooksActivity.this, SignInActivity.class);
+                            Toast.makeText(AllBooksActivity.this, "Sign out success.", Toast.LENGTH_LONG).show();
                             startActivity(intent);
                             break;
                         case R.id.nav_home:

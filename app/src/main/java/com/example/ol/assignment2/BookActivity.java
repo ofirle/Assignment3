@@ -72,48 +72,15 @@ public class BookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
-        //getPutExtras();
-        Intent intent = getIntent();
-        m_TheBook = (Book) intent.getSerializableExtra("choseBook");
-        m_User = (User) intent.getSerializableExtra("user");
-        m_ListBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
-        m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
-        m_ActivityFrom = intent.getStringExtra("activityFrom");
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-        Menu menu = bottomNav.getMenu();
-        MenuItem menuItem = menu.getItem(checkActivityFrom(m_ActivityFrom));
-        menuItem.setChecked(true);
+        getPutExtras();
         initUI();
-        final int idBook = m_TheBook.getId();
-        final String Title = m_TheBook.getTitle();
-        String Author = m_TheBook.getAuthor();
-        String Genre = m_TheBook.getGenre();
-        int Pages = m_TheBook.getPages();
-        int Year = m_TheBook.getYear();
-        int Downloads = m_TheBook.getDownloads();
-        String Image = m_TheBook.getImg();
-        double Rating = m_TheBook.getRating();
-        double Price = m_TheBook.getPrice();
-        final String pdf = m_TheBook.getPdf();
-        ratingBarBook.setRating(Float.parseFloat(Double.toString(m_TheBook.getRating())));
-        tvTitle.setText(Title);
-        tvAuthor.setText(Author);
-        tvGenre.setText(Genre);
-        tvPages.setText(Integer.toString(Pages) + " Pages");
-        tvYear.setText(Integer.toString(Year));
-        tvDownload.setText(Integer.toString(Downloads));
-        Uri myUri = Uri.parse(Image);
-        Picasso.with(BookActivity.this).load(myUri).into(ivBookCover);
-        ivBookCover.setScaleType(ImageView.ScaleType.FIT_XY);
-        boolean Bought = checkIfBought();
-        buttonsSetChecker(Bought, Price);
-        getReviews();
+        initBookDisplay();
+
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(m_TheBook.getPdf()));
                 startActivity(browserIntent);
             }
         });
@@ -132,7 +99,7 @@ public class BookActivity extends AppCompatActivity {
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeReview(Title);
+                writeReview(m_TheBook.getTitle());
             }
 
         });
@@ -173,6 +140,7 @@ public class BookActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_signOut:
                             signOutFirebase();
+                            Toast.makeText(BookActivity.this, "Sign out success.", Toast.LENGTH_LONG).show();
                             intent = new Intent(BookActivity.this, SignInActivity.class);
                             break;
                         case R.id.nav_home:
@@ -384,13 +352,45 @@ public class BookActivity extends AppCompatActivity {
     }
 
     private void getPutExtras() {
-
-
+        Intent intent = getIntent();
+        m_TheBook = (Book) intent.getSerializableExtra("choseBook");
+        m_User = (User) intent.getSerializableExtra("user");
+        m_ListBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
+        m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
+        m_ActivityFrom = intent.getStringExtra("activityFrom");
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        Menu menu = bottomNav.getMenu();
+        MenuItem menuItem = menu.getItem(checkActivityFrom(m_ActivityFrom));
+        menuItem.setChecked(true);
     }
 
     private void initBookDisplay()
     {
-
+        final int idBook = m_TheBook.getId();
+        final String Title = m_TheBook.getTitle();
+        String Author = m_TheBook.getAuthor();
+        String Genre = m_TheBook.getGenre();
+        int Pages = m_TheBook.getPages();
+        int Year = m_TheBook.getYear();
+        int Downloads = m_TheBook.getDownloads();
+        String Image = m_TheBook.getImg();
+        double Rating = m_TheBook.getRating();
+        double Price = m_TheBook.getPrice();
+        final String pdf = m_TheBook.getPdf();
+        ratingBarBook.setRating(Float.parseFloat(Double.toString(m_TheBook.getRating())));
+        tvTitle.setText(Title);
+        tvAuthor.setText(Author);
+        tvGenre.setText(Genre);
+        tvPages.setText(Integer.toString(Pages) + " Pages");
+        tvYear.setText(Integer.toString(Year));
+        tvDownload.setText(Integer.toString(Downloads));
+        Uri myUri = Uri.parse(Image);
+        Picasso.with(BookActivity.this).load(myUri).into(ivBookCover);
+        ivBookCover.setScaleType(ImageView.ScaleType.FIT_XY);
+        boolean Bought = checkIfBought();
+        buttonsSetChecker(Bought, Price);
+        getReviews();
     }
 
     private void signOutGuest()
