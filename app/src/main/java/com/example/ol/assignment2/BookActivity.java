@@ -184,8 +184,6 @@ public class BookActivity extends AppCompatActivity {
     public void getReviews() {
 
         m_ListReview = new ArrayList<>();
-        //m_ListReview.add(new Review("Elad Ben-Moshe", 1, "12-05-2017", "Geate Book!, Excellent wrtiting", 4.5));
-
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Books").child(Integer.toString(m_TheBook.getId()));
         DatabaseReference mReviewsBookDatabase = mDatabase.child("Reviews");
         mReviewsBookDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -432,8 +430,6 @@ public class BookActivity extends AppCompatActivity {
             bookRef.child("downloads").setValue(m_TheBook.getDownloads());
             tvDownload.setText(Integer.toString(m_TheBook.getDownloads()));
             Toast toast=Toast.makeText(BookActivity.this, "Successfully Purchased", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
-            toast.show();
             btnReview.setVisibility(View.VISIBLE);
             if(m_ListReview.size()==0)
             {
