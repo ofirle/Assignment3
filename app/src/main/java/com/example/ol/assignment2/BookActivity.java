@@ -75,7 +75,7 @@ public class BookActivity extends AppCompatActivity {
         //getPutExtras();
         Intent intent = getIntent();
         m_TheBook = (Book) intent.getSerializableExtra("choseBook");
-        m_User = (User) intent.getSerializableExtra("m_User");
+        m_User = (User) intent.getSerializableExtra("user");
         m_ListBook = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
         m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
         m_ActivityFrom = intent.getStringExtra("activityFrom");
@@ -159,16 +159,16 @@ public class BookActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_orders:
                             intent = new Intent(BookActivity.this, OrdersActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBook);
                             break;
                         case R.id.nav_all:
                             intent = new Intent(BookActivity.this, AllBooksActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             break;
                         case R.id.nav_search:
                             intent = new Intent(BookActivity.this, SearchActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBook);
                             break;
                         case R.id.nav_signOut:

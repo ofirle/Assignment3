@@ -95,13 +95,13 @@ public class SearchActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_orders:
                             intent = new Intent(SearchActivity.this, OrdersActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBooks);
                             startActivity(intent);
                             break;
                         case R.id.nav_all:
                             intent = new Intent(SearchActivity.this, AllBooksActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             startActivity(intent);
                             break;
                         case R.id.nav_search:
@@ -141,7 +141,7 @@ public class SearchActivity extends AppCompatActivity {
             Intent intent = new Intent(SearchActivity.this, SignInActivity.class);
             startActivity(intent);
         } else {
-            m_User = (User) getIntent().getSerializableExtra("m_User");
+            m_User = (User) getIntent().getSerializableExtra("user");
             m_ListBooks = (ArrayList<Book>) getIntent().getSerializableExtra("booksList");
         }
     }

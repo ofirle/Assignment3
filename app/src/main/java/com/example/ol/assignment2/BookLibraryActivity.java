@@ -63,18 +63,18 @@ public class BookLibraryActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_orders:
                             intent = new Intent(BookLibraryActivity.this, OrdersActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBooks);
                             startActivity(intent);
                             break;
                         case R.id.nav_all:
                             intent = new Intent(BookLibraryActivity.this, AllBooksActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             startActivity(intent);
                             break;
                         case R.id.nav_search:
                             intent = new Intent(BookLibraryActivity.this, SearchActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBooks);
                             startActivity(intent);
                             break;

@@ -59,12 +59,12 @@ public class OrdersActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_all:
                             intent = new Intent(OrdersActivity.this, AllBooksActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             startActivity(intent);
                             break;
                         case R.id.nav_search:
                             intent = new Intent(OrdersActivity.this, SearchActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBook);
                             startActivity(intent);
                             break;
@@ -148,7 +148,7 @@ public class OrdersActivity extends AppCompatActivity {
     private void initVariablesAndUI()
     {
         Intent intent = getIntent();
-        m_User = (User) intent.getSerializableExtra("m_User");
+        m_User = (User) intent.getSerializableExtra("user");
         m_MyFont = Typeface.createFromAsset(this.getAssets(), "fonts/Champagne & Limousines Bold.ttf");
         m_ListBook = (ArrayList<Book>) intent.getSerializableExtra("booksList");
 

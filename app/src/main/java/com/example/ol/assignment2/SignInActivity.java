@@ -285,12 +285,12 @@ public class SignInActivity extends AppCompatActivity {
         } else {
             if (getIntent().getStringExtra("activityFrom").equals("OrdersActivity")) {
                 intent = new Intent(SignInActivity.this, OrdersActivity.class);
-                intent.putExtra("m_User", i_User);
+                intent.putExtra("user", i_User);
                 intent.putExtra("booksList", m_ListBooks);
                 startActivity(intent);
             } else if (getIntent().getStringExtra("activityFrom").equals("BookActivity")) {
                 intent = new Intent(SignInActivity.this, BookActivity.class);
-                intent.putExtra("m_User", i_User);
+                intent.putExtra("user", i_User);
                 intent.putExtra("booksList", m_ListBooks);
                 intent.putExtra("choseBook", m_BookFromGuest);
                 intent.putExtra("activityFrom", "SignInActivity");

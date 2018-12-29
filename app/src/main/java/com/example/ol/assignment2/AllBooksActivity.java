@@ -121,7 +121,7 @@ public class AllBooksActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_orders:
                             intent = new Intent(AllBooksActivity.this, OrdersActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBooks);
                             startActivity(intent);
                             break;
@@ -129,7 +129,7 @@ public class AllBooksActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_search:
                             intent = new Intent(AllBooksActivity.this, SearchActivity.class);
-                            intent.putExtra("m_User", m_User);
+                            intent.putExtra("user", m_User);
                             intent.putExtra("booksList", m_ListBooks);
                             startActivity(intent);
                             break;
@@ -300,7 +300,7 @@ public class AllBooksActivity extends AppCompatActivity {
             m_MyUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    m_User = (User) getIntent().getSerializableExtra("m_User");
+                    m_User = (User) getIntent().getSerializableExtra("user");
                     readingDataFromDatabase();
                 }
 
